@@ -63,6 +63,7 @@ jobs:
 
       - name: Build
         run: |
+          cordova platform add android
           cordova build android
 
       - name: Archive apks
