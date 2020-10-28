@@ -23,10 +23,25 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-      
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-java-with-gradle
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
       # https://github.com/oxr463/setup-cordova
       - name: Use oxr463/setup-cordova
         uses: oxr463/setup-cordova@0.0.2
@@ -34,5 +49,10 @@ jobs:
           exec: |
             cordova platform add android && \
             cordova build --no-telemetry && \
-            cp "$(find . -name '*.apk')" .
+            echo "$(find . -name '*.apk')"
+      # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
+      - name: Archive apks
+        uses: actions/upload-artifact@v2
+        path: |
+          **/*.apk
       
