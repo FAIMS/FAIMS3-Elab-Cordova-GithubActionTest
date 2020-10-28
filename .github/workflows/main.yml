@@ -63,7 +63,7 @@ jobs:
 
       - name: Build
         run: |
-          ionic cordova build android --prod
+          cordova build android
 
       - name: Archive apks
         uses: actions/upload-artifact@v2
