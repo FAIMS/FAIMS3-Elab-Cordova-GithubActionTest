@@ -53,6 +53,8 @@ jobs:
       # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
       - name: Archive apks
         uses: actions/upload-artifact@v2
-        path: |
-          /**/*.apk
+        with:
+          name: apks
+          path: |
+            /**/*.apk
       
