@@ -90,10 +90,11 @@ jobs:
       # https://cordova.apache.org/docs/en/latest/guide/cli/
       # We need to make sure to cache this, but ... later
       - run: sudo npm install -g cordova
+      - run: cordova platform add android # Again, adding that... locally. How odd.
       - run: cordova requirements
       - run: cordova build android 
       # limiting scope to only android here.
-      
+
       - name: Archive apks
         uses: actions/upload-artifact@v2
         with:
