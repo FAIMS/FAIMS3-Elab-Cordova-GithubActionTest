@@ -43,18 +43,32 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       # https://github.com/oxr463/setup-cordova
-      - name: Use oxr463/setup-cordova
-        uses: oxr463/setup-cordova@0.0.2
-        with:
-          exec: |
-            cordova platform add android && \
-            cordova build --no-telemetry && \
-            echo "$(find . -name '*.apk')"
+      # This is a docker build, so I don't think any of the caching will do any good...
+      # This is also using gradle 5.7 instead of 7, so we'll have to rebuild this.
+      # - name: Use oxr463/setup-cordova
+      #   uses: oxr463/setup-cordova@0.0.2
+      #   with:
+      #     exec: |
+      #       cordova platform add android && \
+      #       cordova build --no-telemetry && \
+      #       echo "$(find . -name '*.apk')" && \
+      #       cp "$(find . -name '*.apk')" .
       # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
+      
+      # https://github.com/marketplace/actions/setup-ionic
+      - name: Use coturiv/setup-ionic
+        uses: coturiv/setup-ionic@v1
+        with:
+          cordova-version: 9
+
+      - name: Build
+        run: |
+          ionic cordova build android --prod
+
       - name: Archive apks
         uses: actions/upload-artifact@v2
         with:
           name: apks
           path: |
-            /**/*.apk
+            ./platforms/**/*.apk
       
