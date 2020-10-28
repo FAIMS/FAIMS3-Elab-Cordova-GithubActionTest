@@ -89,7 +89,7 @@ jobs:
 
       # https://cordova.apache.org/docs/en/latest/guide/cli/
       # We need to make sure to cache this, but ... later
-      - run: sudo npm install -g cordova
+      - run: sudo npm install -g cordova # This installs cordova 10. We'll want to staple it to a specific major version.
       - run: cordova platform add android # Again, adding that... locally. How odd.
       - run: cordova requirements
       - run: cordova build android 
