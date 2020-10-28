@@ -54,5 +54,5 @@ jobs:
       - name: Archive apks
         uses: actions/upload-artifact@v2
         path: |
-          **/*.apk
+          /**/*.apk
       
